@@ -1,0 +1,7 @@
+Line one for the cross reference.
+Another line of the file, with a comma.
+Line three.  Another line.
+As you read each line, decompose it into its individual words.
+If the list is empty, create a new node with the word as the data and point the head to it.
+Does not handle multiple files correctly.
+Duplicate words printed.

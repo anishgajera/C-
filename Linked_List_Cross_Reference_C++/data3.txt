@@ -1,0 +1,10 @@
+One
+Word
+Per
+Line
+for
+one
+Easy
+test
+case
+Several words per line.

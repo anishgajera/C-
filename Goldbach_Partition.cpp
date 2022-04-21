@@ -1,228 +1,102 @@
 /*
  * Author:     Anish Gajera
  * Course:     CS 1336.010
- * Date:       11/11/2020
- * Assignment: Lecture Homework 8, Excercise 1
+ * Date:       11/16/2020
+ * Assignment: Lecture Homework 9, Excercise 1
  * Compiler:   Xcode
  */
 
 /*
- * Description: This program asks the user to enter in a number which ranges from 1 to 100,
- * and after the user inputs the number, prime numbers are printed out based on the value entered.
- * Ex) if the user enters 37, the first 37 prime numbers are outputted
+ * Description: This program calculates and displays on the screen
+ * a Goldbach partition for all even integers between 4 and 100. (includes bonus as all partitons are printed out)
  */
 
 #include <iostream>
 #include <ostream>
 #include <iomanip>
 #include <cmath>
-#include <fstream>
+#include <string>
 using namespace std;
 
-//output file declaration
-ofstream fileOut;
+//function prototype(s)
+bool isPrime (int num);
 
-void file();
-int num = 100;
-//function prototype
-bool isPrime(int num);
-
-bool value;
-//user entered value
-int userVal;
-//counter - # of prime numbers that will be printed
-int counter1 = 0;
-
-//function prototype
-void number();
-
-//counter - 10 numbers per line
-int counter2 = 0;
 
 int main()
 {
-   file();
-   //call to function "number"
-   number();
+   //num to start with
+   int testingNum = 4;
    
-   //call to function "isPrime"
-   isPrime(num);
-   
-   return 0;
+   //goes until num is 100
+   while (testingNum <= 100)
+   {
+      //cout prompts
+      cout << "Even integer " << testingNum;
+      //testing for the Goldbach partitions
+      for (int val1 = 2; val1 <= testingNum / 2; val1++)
+      {
+         if (isPrime(val1))
+         {
+            for (int val2 = testingNum - val1; val2 <= testingNum; val2++)
+            {
+               if (isPrime(val2) && (val1 + val2 == testingNum))
+               {
+                  cout << " = " << val1 << " + " << val2;
+                  break;
+               }
+            }
+         }
+      }
+      cout << endl;
+      testingNum+=2;
+   }
 }//end function main()
 
-void number()
-{
-   //user prompted to enter value
-   cout << "Enter a number between 1 and 100" << endl;
-   cin >> userVal;
-   //if value is not valid, this input validation loop runs to get a valid value from the user
-   while (userVal < 1 || userVal > 100)
-   {
-      cout << "Number out of range, please re-enter" << endl;
-      cin >> userVal;
-   }
-}//end function number()
-
+// function takes in a number returns true if the number is a prime false if otherwise
 /*
-  * This function isPrime() uses the number entered by the user (call it #) to find and output # number of prime numbers
-  * the number entered by the user is between 1 and 100, therefore, for example, if the user enters 37, the first
-  * 37 prime numbers are outputted. Spacing and number primes is accomodated within the function through the use of loops
-  * and "counter" variables within the function.
+  * This function isPrime() is used to find prime numbers.
+  * The function checks a series of conditions with variable "num" and based on it,
+  * determines whether or not the number is prime or not to return the goldbach partitions
  */
-bool isPrime(int num)
+bool isPrime (int num)
 {
-   fileOut.open("PrimeOut.txt");
-   for (int i = 2; i <= num; i++)
+   if (num <= 1)
    {
-      bool value = true;
-      for (int j = 2; j <= (i - 1); j++)
-      {
-         if (i % j == 0)
-         {
-            value = false;
-            break;
-         }
-      }
-      if (value == true)
-      {
-         fileOut << i << setw(5);
-         cout << i << "  ";
-         counter1++;
-         counter2++;
-         if (counter2 == 10)
-         {
-            cout << endl;
-            counter2 = 0;
-         }
-      }
-      num++;
+      return false;
+   }
       
-      if (counter1 == userVal)
-      {
-         break;
-      }
-   }
-   cout << endl;
-   
-   return value;
-}//end function isPrime(int num)
-
-/*
- * This function can be used to open the output file after the prime numbers have been outputted;
- * this function determines whether or not the file was opened successfully and then the user is able to enter in
- * information required which would then be outputted to the corresponding output file.
- */
-void file()
-{
-   fileOut.open("PrimeOut.txt");
-   
-   if(!fileOut)
+   for (int i = 2; i < num; i++)
    {
-      cout << "The file could not be opened. Try again" << endl;
-   }
-   else
+      if (num % i == 0)
    {
-      cout << "File opened successfully" << endl;
+      return false;
    }
-   
-   fileOut.close();
-}//end function file()
-
-
-
-
-
+      
+   }
+   return true;
+}//end function isPrime()
 
 
 
 //NOTES
 /*
- int main()
+   Calculate and display on the screen a Goldbach partition for all even integers
+   between 4 and 100. Here is a sample output for the val1 few numbers:
+   A sample Goldbach Partition for all even integers between 4 and 100:
+      Even integer 4 = 2 + 2
+      Even integer 6 = 3 + 3
+      Even integer 8 = 3 + 5
+      Even integer 10 = 3 + 7
+ 
+ 
+ 
+ bool isPrime (int num)
  {
-    int num;
-    cout << "Enter a number between 1 and 100" << endl;
-    cin >> num;
-    while (num < 1 || num > 100)
+    for (int i = 2; i <= num / 2; i++)
     {
-       cout << "Number out of range, please re-enter" << endl;
-       cin >> num;
+       if (num % i == 0)
+          return false;
     }
-    int currentNum = 2;
-    isPrime(num);
-    
-    return 0;
- }
- */
-
-/*
- bool isPrime(int num)
- {
-    bool isPrime = false;
-    int counter = 0;
-    int currentNum = 2;
-    num = enterNum();
-    if (num == 1)
-    {
-       isPrime = true;
-       cout << currentNum << endl;
-    }
-    while (num > 1)
-    {
-       for (int i = 0; i < num; i++)
-       {
-          if (currentNum % 2 == 0)
-          {
-             cout << setw(5) << currentNum;
-             currentNum++;
-             counter++;
-             while (counter == 10)
-             {
-                cout << endl;
-                counter = 0;
-             }
-          }
-       }
-    }
-    
-    return isPrime;
- }
- */
-
-/*
- bool isPrime(int num)
- {
-    bool isPrime;
-    int currentNum = 2;
-    int count = 0;
-    
-    if (num == 1)
-    {
-       cout << currentNum;
-       isPrime = true;
-       return isPrime;
-    }
-    else if (num > 1)
-    {
-       for(int i = 0; i < num; i++)
-       {
-          while (currentNum % 2 != 0)
-          {
-             cout << currentNum;
-             currentNum++;
-             isPrime = false;
-             return isPrime;
-          }
-          count++;
-          while (count == 10)
-          {
-             cout << endl;
-             count = 0;
-          }
-       }
-    }
-    
-    
-    return isPrime;
+    return true;
  }
  */
